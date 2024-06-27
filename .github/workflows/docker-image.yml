@@ -52,6 +52,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/servermon:latest
-            ghcr.io/${{ github.actor }}/servermon:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/chitchat:latest
+            ghcr.io/${{ github.actor }}/chitchat:latest
             ${{ steps.meta.outputs.tags }}
