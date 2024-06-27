@@ -21,5 +21,5 @@ RUN dotnet publish "./ChitChat_Server.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ChitChat_Server.dll"]
