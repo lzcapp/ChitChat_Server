@@ -12,7 +12,9 @@ connection.on("ReceiveMessage",
         // We can assign user-supplied strings to an element's textContent because it
         // is not interpreted as markup. If you're assigning in any other way, you 
         // should be aware of possible script injection concerns.
-        li.textContent = `${user} says ${message}`;
+        var currentDate = new Date();
+        var formattedDate = currentDate.toLocaleString();
+        li.textContent = `[${formattedDate}] ${user}: ${message}`;
     });
 
 connection.start().then(function() {

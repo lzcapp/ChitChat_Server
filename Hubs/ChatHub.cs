@@ -4,20 +4,12 @@ using System.Security.Claims;
 namespace ChitChat_Server.Hubs {
     public class ChatHub : Hub {
         public override async Task OnConnectedAsync() {
-            if (Context.User is {
-                Identity: not null
-            }) {
-                await Broadcast("User [" + Context.User.Identity.Name + "] has joined the server.");
-            }
+            await Broadcast($"[{Context.ConnectionId}] joined the server.");
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception) {
-            if (Context.User is {
-                Identity: not null
-            }) {
-                await Broadcast("User [" + Context.User.Identity.Name + "] has leaved the server.");
-            }
+            await Broadcast($"[{Context.ConnectionId}] leave the server.");
             await base.OnDisconnectedAsync(exception);
         }
 
