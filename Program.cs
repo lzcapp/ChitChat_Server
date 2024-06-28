@@ -1,4 +1,4 @@
-using SignalRChat.Hubs;
+using ChitChat_Server.Hubs;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
