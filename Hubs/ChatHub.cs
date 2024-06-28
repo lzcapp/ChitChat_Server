@@ -3,11 +3,12 @@
 namespace ChitChat_Server.Hubs {
     public class ChatHub : Hub {
         public override async Task OnConnectedAsync() {
-            await Broadcast("User " + Context.UserIdentifier + " joined.");
+            await Broadcast("User [" + Context.UserIdentifier + "] joined the server.");
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception) {
+            await Broadcast("User [" + Context.UserIdentifier + "] leaved the server.");
             await base.OnDisconnectedAsync(exception);
         }
 
