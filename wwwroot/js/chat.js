@@ -23,9 +23,8 @@ connection.start().then(function() {
 
 document.getElementById("sendButton").addEventListener("click",
     function(event) {
-        var user = "ChiChat Server";
         var message = document.getElementById("messageInput").value;
-        connection.invoke("SendMessage", user, message).catch(function(err) {
+        connection.invoke("Broadcast", message).catch(function(err) {
             return console.error(err.toString());
         });
         event.preventDefault();
