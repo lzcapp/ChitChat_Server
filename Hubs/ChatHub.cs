@@ -4,8 +4,14 @@ using System.Security.Claims;
 namespace ChitChat_Server.Hubs {
     public class ChatHub : Hub {
         public override async Task OnConnectedAsync() {
-            await Broadcast($"[{Context.ConnectionId}] joined the server.");
             await base.OnConnectedAsync();
+            var username = "";
+            if (Context?.GetHttpContext() != null) {
+                username = Context.GetHttpContext().Request.Query["username"];
+            } else {
+                username = Context.ConnectionId;
+            }
+            await Broadcast($"[{username}] joined the server.");
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception) {
