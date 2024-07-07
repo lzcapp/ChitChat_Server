@@ -24,4 +24,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ChitChat_Server.dll"]
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl https://chitchat.seeleo.com/chitchat || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl https://127.0.0.1/chitchat || exit 1
