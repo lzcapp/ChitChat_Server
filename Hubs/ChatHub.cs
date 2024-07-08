@@ -7,24 +7,25 @@ namespace ChitChat_Server.Hubs {
             HttpContext? httpContext = Context.GetHttpContext();
             var connectionId = Context.ConnectionId;
             var username = httpContext != null ? httpContext.Request.Query["username"].ToString() : connectionId;
-            //_users.Add(new KeyValuePair<string, string>(connectionId, username));
-            await Clients.All.SendAsync("UserJoined", connectionId, username);
+            ClientList.clients.Add(new KeyValuePair<string, string>(connectionId, username));
+            await Clients.AllExcept(connectionId).SendAsync("UserJoined", connectionId, username);
+            await Clients.All.SendAsync("UserList", ClientList.clients);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception) {
             var connectionId = Context.ConnectionId;
             var username = string.Empty;
-            //foreach (KeyValuePair<string, string> user in _users) {
-            //    if (user.Key != connectionId) {
-            //        continue;
-            //    }
-            //    username = user.Value;
-            //    break;
-            //}
+            foreach (KeyValuePair<string, string> client in ClientList.clients) {
+                if (client.Key == connectionId) {
+                    username = client.Value;
+                    ClientList.clients.Remove(new KeyValuePair<string, string>(connectionId, username));
+                    break;
+                }
+            }
             if (username != string.Empty) {
-                await Clients.All.SendAsync("UserLeft", connectionId, username);
+                await Clients.AllExcept(connectionId).SendAsync("UserLeft", connectionId, username);
             } else {
-                await Clients.All.SendAsync("UserLeft", connectionId, string.Empty);
+                await Clients.AllExcept(connectionId).SendAsync("UserLeft", connectionId, string.Empty);
             }
             await base.OnDisconnectedAsync(exception);
         }
