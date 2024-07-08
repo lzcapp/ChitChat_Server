@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
 
 namespace ChitChat_Server.Hubs {
     public class ChatHub : Hub {
@@ -8,13 +7,25 @@ namespace ChitChat_Server.Hubs {
             HttpContext? httpContext = Context.GetHttpContext();
             var connectionId = Context.ConnectionId;
             var username = httpContext != null ? httpContext.Request.Query["username"].ToString() : connectionId;
-            await UserJoined(connectionId, username);
+            //_users.Add(new KeyValuePair<string, string>(connectionId, username));
+            await Clients.All.SendAsync("UserJoined", connectionId, username);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception) {
-            Context.GetHttpContext();
             var connectionId = Context.ConnectionId;
-            await UserLeft(connectionId, "");
+            var username = string.Empty;
+            //foreach (KeyValuePair<string, string> user in _users) {
+            //    if (user.Key != connectionId) {
+            //        continue;
+            //    }
+            //    username = user.Value;
+            //    break;
+            //}
+            if (username != string.Empty) {
+                await Clients.All.SendAsync("UserLeft", connectionId, username);
+            } else {
+                await Clients.All.SendAsync("UserLeft", connectionId, string.Empty);
+            }
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -28,14 +39,6 @@ namespace ChitChat_Server.Hubs {
 
         public async Task SendPrivateMessage(string connectionId, string user, string message) {
             await Clients.Client(connectionId).SendAsync("ReceiveMessage", user, message);
-        }
-
-        private async Task UserJoined(string connectionID, string user) {
-            await Clients.All.SendAsync("UserJoined", connectionID, user);
-        }
-
-        private async Task UserLeft(string connectionID, string user) {
-            await Clients.All.SendAsync("UserLeft", connectionID, user);
         }
     }
 }
