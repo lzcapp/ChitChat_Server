@@ -24,5 +24,5 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ChitChat_Server.dll"]
 
-RUN apt-get update && apt-get install -y curl
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl http://127.0.0.1:8080/chitchat || exit 1
+#RUN apt-get update && apt-get install -y curl
+#HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl http://127.0.0.1:8080/chitchat || exit 1
